@@ -1,0 +1,94 @@
+Create Flask application that runs a simple calculator with buttons for the numbers and input.
+
+---------------------------------------------------------------------------------------------------------------
+
+Creating a simple calculator web application using Flask involves setting up a Flask project, designing a calculator UI in HTML, handling form submissions to perform calculations, and displaying the results. Here's a step-by-step guide on how to achieve this:
+
+Step 1: Set Up Your Flask Environment
+Install Flask: If you haven't already, you'll need to install Flask. You can do this via pip:
+
+bash
+Copy code
+pip install Flask
+Create Your Project Directory: Make a new directory for your project and navigate into it:
+
+bash
+Copy code
+mkdir flask_calculator
+cd flask_calculator
+Create Python Virtual Environment (Optional, but recommended):
+
+bash
+Copy code
+python -m venv venv
+source venv/bin/activate  # On Windows use `venv\Scripts\activate`
+Step 2: Create Your Flask Application
+Initialize Flask App: In your project directory, create a file named app.py. This will be your main Flask application file.
+
+python
+Copy code
+from flask import Flask, request, render_template
+
+app = Flask(__name__)
+
+@app.route('/', methods=['GET', 'POST'])
+def calculator():
+    result = ""
+    if request.method == 'POST':
+        number1 = request.form.get("number1", type=float, default=0)
+        number2 = request.form.get("number2", type=float, default=0)
+        operation = request.form.get("operation")
+        if operation == 'add':
+            result = number1 + number2
+        elif operation == 'subtract':
+            result = number1 - number2
+        elif operation == 'multiply':
+            result = number1 * number2
+        elif operation == 'divide':
+            result = number1 / number2 if number2 != 0 else "Error: Division by zero"
+
+    return render_template('calculator.html', result=result)
+
+if __name__ == '__main__':
+    app.run(debug=True)
+Create HTML Template: Inside your project directory, create a folder named templates. Inside templates, create a file named calculator.html. This HTML file will contain the UI for your calculator.
+
+html
+Copy code
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Flask Calculator</title>
+</head>
+<body>
+    <form method="post">
+        <input type="text" name="number1" placeholder="Enter first number" required>
+        <input type="text" name="number2" placeholder="Enter second number" required>
+        <select name="operation">
+            <option value="add">Add</option>
+            <option value="subtract">Subtract</option>
+            <option value="multiply">Multiply</option>
+            <option value="divide">Divide</option>
+        </select>
+        <button type="submit">Calculate</button>
+    </form>
+    {% if result != "" %}
+        <h2>Result: {{ result }}</h2>
+    {% endif %}
+</body>
+</html>
+Step 3: Run Your Flask Application
+Start the Flask Application: Go back to your terminal, make sure you are in your project directory and the virtual environment is activated, then start the Flask application:
+
+bash
+Copy code
+flask run
+or
+
+bash
+Copy code
+python app.py
+Access the Application: Open a web browser and go to http://127.0.0.1:5000/. You should see your simple calculator web application.
+
+This basic application will allow users to input two numbers, select an operation (add, subtract, multiply, divide), and see the result displayed on the page. You can enhance this application by adding more features such as handling more complex calculations, improving the UI with CSS, or adding JavaScript for dynamic content updating.
+
